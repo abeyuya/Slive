@@ -7,6 +7,8 @@ target 'SlideViewer' do
 
   # Pods for SlideViewer
   pod 'SlideViewer', path: '../pod/PDFSlideView'
+  pod 'XLPagerTabStrip'
+  pod 'R.swift'
 
   target 'SlideViewerTests' do
     inherit! :search_paths

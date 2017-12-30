@@ -13,6 +13,11 @@
 		4D7D267D1FF7E82300C0C17A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4D7D267C1FF7E82300C0C17A /* Assets.xcassets */; };
 		4D7D26801FF7E82300C0C17A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4D7D267E1FF7E82300C0C17A /* LaunchScreen.storyboard */; };
 		4D7D268B1FF7E82300C0C17A /* SlideViewerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D7D268A1FF7E82300C0C17A /* SlideViewerTests.swift */; };
+		4DDB24411FF7EDA5000CB7BD /* Search.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4DDB243F1FF7EDA5000CB7BD /* Search.storyboard */; };
+		4DDB24451FF7F10D000CB7BD /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DDB24441FF7F10D000CB7BD /* SearchViewController.swift */; };
+		4DDB24481FF7F551000CB7BD /* SearchSpeakerDeck.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4DDB24471FF7F551000CB7BD /* SearchSpeakerDeck.storyboard */; };
+		4DDB244A1FF7F57F000CB7BD /* SearchSpeakerDeckViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DDB24491FF7F57F000CB7BD /* SearchSpeakerDeckViewController.swift */; };
+		4DDB244D1FF7F6E3000CB7BD /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DDB244C1FF7F6E3000CB7BD /* R.generated.swift */; };
 		ADFE895361D6EB9B4155FD50 /* Pods_SlideViewerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AFA4CCCE4307F5F41E3B16B /* Pods_SlideViewerTests.framework */; };
 		BD4CEFF3056CAB7A3E626F89 /* Pods_SlideViewer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4CEEF4CEA20D4D42512F718 /* Pods_SlideViewer.framework */; };
 /* End PBXBuildFile section */
@@ -41,6 +46,11 @@
 		4D7D26861FF7E82300C0C17A /* SlideViewerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SlideViewerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D7D268A1FF7E82300C0C17A /* SlideViewerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideViewerTests.swift; sourceTree = "<group>"; };
 		4D7D268C1FF7E82300C0C17A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4DDB24401FF7EDA5000CB7BD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Search.storyboard; sourceTree = "<group>"; };
+		4DDB24441FF7F10D000CB7BD /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SearchViewController.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		4DDB24471FF7F551000CB7BD /* SearchSpeakerDeck.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SearchSpeakerDeck.storyboard; sourceTree = "<group>"; };
+		4DDB24491FF7F57F000CB7BD /* SearchSpeakerDeckViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSpeakerDeckViewController.swift; sourceTree = "<group>"; };
+		4DDB244C1FF7F6E3000CB7BD /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = "<group>"; };
 		4F64DF0FBBBE9D7029B997B2 /* Pods-SlideViewerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SlideViewerTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SlideViewerTests/Pods-SlideViewerTests.release.xcconfig"; sourceTree = "<group>"; };
 		56BE27FCDF753AE3BD405F54 /* Pods-SlideViewerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SlideViewerTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SlideViewerTests/Pods-SlideViewerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		F4CEEF4CEA20D4D42512F718 /* Pods_SlideViewer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SlideViewer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -80,11 +90,11 @@
 		4D7D26691FF7E82300C0C17A = {
 			isa = PBXGroup;
 			children = (
+				C26530EE86FFC901C84B7566 /* Frameworks */,
+				3E08BC8D6DEFE3B248B4A7AF /* Pods */,
+				4D7D26731FF7E82300C0C17A /* Products */,
 				4D7D26741FF7E82300C0C17A /* SlideViewer */,
 				4D7D26891FF7E82300C0C17A /* SlideViewerTests */,
-				4D7D26731FF7E82300C0C17A /* Products */,
-				3E08BC8D6DEFE3B248B4A7AF /* Pods */,
-				C26530EE86FFC901C84B7566 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -100,12 +110,14 @@
 		4D7D26741FF7E82300C0C17A /* SlideViewer */ = {
 			isa = PBXGroup;
 			children = (
+				4DDB24431FF7F0C6000CB7BD /* Search */,
 				4D7D26751FF7E82300C0C17A /* AppDelegate.swift */,
-				4D7D26771FF7E82300C0C17A /* ViewController.swift */,
-				4D7D26791FF7E82300C0C17A /* Main.storyboard */,
 				4D7D267C1FF7E82300C0C17A /* Assets.xcassets */,
-				4D7D267E1FF7E82300C0C17A /* LaunchScreen.storyboard */,
 				4D7D26811FF7E82300C0C17A /* Info.plist */,
+				4D7D267E1FF7E82300C0C17A /* LaunchScreen.storyboard */,
+				4D7D26791FF7E82300C0C17A /* Main.storyboard */,
+				4DDB244C1FF7F6E3000CB7BD /* R.generated.swift */,
+				4D7D26771FF7E82300C0C17A /* ViewController.swift */,
 			);
 			path = SlideViewer;
 			sourceTree = "<group>";
@@ -113,10 +125,30 @@
 		4D7D26891FF7E82300C0C17A /* SlideViewerTests */ = {
 			isa = PBXGroup;
 			children = (
-				4D7D268A1FF7E82300C0C17A /* SlideViewerTests.swift */,
 				4D7D268C1FF7E82300C0C17A /* Info.plist */,
+				4D7D268A1FF7E82300C0C17A /* SlideViewerTests.swift */,
 			);
 			path = SlideViewerTests;
+			sourceTree = "<group>";
+		};
+		4DDB24431FF7F0C6000CB7BD /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				4DDB24461FF7F535000CB7BD /* SpeakerDeck */,
+				4DDB243F1FF7EDA5000CB7BD /* Search.storyboard */,
+				4DDB24441FF7F10D000CB7BD /* SearchViewController.swift */,
+			);
+			name = Search;
+			path = Search;
+			sourceTree = "<group>";
+		};
+		4DDB24461FF7F535000CB7BD /* SpeakerDeck */ = {
+			isa = PBXGroup;
+			children = (
+				4DDB24471FF7F551000CB7BD /* SearchSpeakerDeck.storyboard */,
+				4DDB24491FF7F57F000CB7BD /* SearchSpeakerDeckViewController.swift */,
+			);
+			path = SpeakerDeck;
 			sourceTree = "<group>";
 		};
 		C26530EE86FFC901C84B7566 /* Frameworks */ = {
@@ -136,6 +168,7 @@
 			buildConfigurationList = 4D7D268F1FF7E82300C0C17A /* Build configuration list for PBXNativeTarget "SlideViewer" */;
 			buildPhases = (
 				38AED8A6506145194391CDAE /* [CP] Check Pods Manifest.lock */,
+				4DDB244B1FF7F5FA000CB7BD /* Run Script R.swift */,
 				4D7D266E1FF7E82300C0C17A /* Sources */,
 				4D7D266F1FF7E82300C0C17A /* Frameworks */,
 				4D7D26701FF7E82300C0C17A /* Resources */,
@@ -219,7 +252,9 @@
 			files = (
 				4D7D26801FF7E82300C0C17A /* LaunchScreen.storyboard in Resources */,
 				4D7D267D1FF7E82300C0C17A /* Assets.xcassets in Resources */,
+				4DDB24411FF7EDA5000CB7BD /* Search.storyboard in Resources */,
 				4D7D267B1FF7E82300C0C17A /* Main.storyboard in Resources */,
+				4DDB24481FF7F551000CB7BD /* SearchSpeakerDeck.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -266,6 +301,20 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		4DDB244B1FF7F5FA000CB7BD /* Run Script R.swift */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script R.swift";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"$PODS_ROOT/R.swift/rswift\" generate \"$SRCROOT\"";
+		};
 		BD9F41BA96EB2BB90DA4D400 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -288,13 +337,17 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-SlideViewer/Pods-SlideViewer-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/R.swift.Library/Rswift.framework",
 				"${BUILT_PRODUCTS_DIR}/ReSwift/ReSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SlideViewer/SlideViewer.framework",
+				"${BUILT_PRODUCTS_DIR}/XLPagerTabStrip/XLPagerTabStrip.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Rswift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SlideViewer.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/XLPagerTabStrip.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -341,8 +394,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4DDB24451FF7F10D000CB7BD /* SearchViewController.swift in Sources */,
 				4D7D26781FF7E82300C0C17A /* ViewController.swift in Sources */,
+				4DDB244D1FF7F6E3000CB7BD /* R.generated.swift in Sources */,
 				4D7D26761FF7E82300C0C17A /* AppDelegate.swift in Sources */,
+				4DDB244A1FF7F57F000CB7BD /* SearchSpeakerDeckViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -371,6 +427,7 @@
 				4D7D267A1FF7E82300C0C17A /* Base */,
 			);
 			name = Main.storyboard;
+			path = .;
 			sourceTree = "<group>";
 		};
 		4D7D267E1FF7E82300C0C17A /* LaunchScreen.storyboard */ = {
@@ -379,6 +436,16 @@
 				4D7D267F1FF7E82300C0C17A /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			path = .;
+			sourceTree = "<group>";
+		};
+		4DDB243F1FF7EDA5000CB7BD /* Search.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4DDB24401FF7EDA5000CB7BD /* Base */,
+			);
+			name = Search.storyboard;
+			path = .;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
