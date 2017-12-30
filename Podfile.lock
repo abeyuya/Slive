@@ -1,0 +1,19 @@
+PODS:
+  - ReSwift (4.0.0)
+  - SlideViewer (0.1.0):
+    - ReSwift
+
+DEPENDENCIES:
+  - SlideViewer (from `../pod/PDFSlideView`)
+
+EXTERNAL SOURCES:
+  SlideViewer:
+    :path: ../pod/PDFSlideView
+
+SPEC CHECKSUMS:
+  ReSwift: f058ef13b46ae5f463f10605ccbbb7fb04424d8d
+  SlideViewer: 44bb581c3cf2362e943da4beb4c7c03053ab5503
+
+PODFILE CHECKSUM: eccca2b6b14323616c35e6d9605f614e7328a66a
+
+COCOAPODS: 1.3.1
