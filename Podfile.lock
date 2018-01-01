@@ -3,12 +3,21 @@ PODS:
     - R.swift.Library (~> 4.0.0)
   - R.swift.Library (4.0.0)
   - ReSwift (4.0.0)
+  - RxCocoa (4.1.0):
+    - RxSwift (~> 4.0)
+  - RxSwift (4.1.0)
+  - RxWebKit (0.3.6):
+    - RxCocoa (~> 4.0)
+    - RxSwift (~> 4.0)
   - SlideViewer (0.1.0):
     - ReSwift
   - XLPagerTabStrip (8.0.0)
 
 DEPENDENCIES:
   - R.swift
+  - RxCocoa
+  - RxSwift
+  - RxWebKit
   - SlideViewer (from `../pod/PDFSlideView`)
   - XLPagerTabStrip
 
@@ -20,9 +29,12 @@ SPEC CHECKSUMS:
   R.swift: d6a5ec2f55a8441dc0ed9f1f8b37d7d11ae85c66
   R.swift.Library: c3af34921024333546e23b70e70d0b4e0cffca75
   ReSwift: f058ef13b46ae5f463f10605ccbbb7fb04424d8d
+  RxCocoa: cc1fec49cdc8fabe645964de7c51c099a36c2aa8
+  RxSwift: 4219941c1244c88002901bd87a69d3aea9ae71f0
+  RxWebKit: 62f45c2a8759482c4b0249b819673f9e19caf0a4
   SlideViewer: 44bb581c3cf2362e943da4beb4c7c03053ab5503
   XLPagerTabStrip: d1ab378af0923320ec0b5eab11d7b2f803d31261
 
-PODFILE CHECKSUM: 55378cd5dc1f9ef5edec88c6d96b9f413f6487e1
+PODFILE CHECKSUM: 0de39bbbb9a4e813097892f2da81c7cc7c1a9de0
 
 COCOAPODS: 1.3.1
