@@ -52,6 +52,7 @@
                     </view>
                     <connections>
                         <outlet property="progressView" destination="dev-mo-WkD" id="Mqe-n7-N4Z"/>
+                        <outlet property="viewButton" destination="5GT-Tj-v6S" id="qlM-j0-rAv"/>
                         <outlet property="webView" destination="rLM-LL-OLQ" id="eRe-Qx-glu"/>
                     </connections>
                 </viewController>

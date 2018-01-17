@@ -11,46 +11,208 @@ import WebKit
 import XLPagerTabStrip
 import RxSwift
 import RxWebKit
+import Kanna
+import SlideViewer
 
 final class SearchSpeakerDeckViewController: UIViewController, IndicatorInfoProvider {
-
+    
     @IBOutlet weak var webView: WKWebView!
     @IBOutlet weak var progressView: UIProgressView!
+    @IBOutlet weak var viewButton: UIButton!
     
-    private let disposeBag = DisposeBag()
+    private struct ScrapeResult {
+        var title: String? = nil
+        var author: String? = nil
+        var authorImagePath: String? = nil
+        var mainImageURLs: [URL] = []
+        var thumbImageURLs: [URL] = []
+    }
 
+    private let disposeBag = DisposeBag()
+    private var scrapeResult: Variable<ScrapeResult> = Variable(ScrapeResult())
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        webView.rx.estimatedProgress
-            .subscribe(onNext: { [weak self] progress in
-                self?.progressView.isHidden = false
-                self?.progressView.setProgress(Float(progress), animated: true)
-                
-                if progress == 1 {
-                    self?.progressView.isHidden = true
-                    self?.progressView.setProgress(0.0, animated: false)
-                }
-            })
-            .disposed(by: disposeBag)
-
-        webView.rx.url
-            .subscribe(onNext: { url in
-                guard let url = url else { return }
-                print("url: \(url)")
-            })
-            .disposed(by: disposeBag)
+        bind()
 
         let startURL = URL(string: "https://speakerdeck.com/")!
         let request = URLRequest(url: startURL)
         webView.load(request)
     }
-    
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
         return IndicatorInfo(title: "My Child title")
+    }
+}
+
+extension SearchSpeakerDeckViewController {
+ 
+    private func bind() {
+        
+        webView.rx.estimatedProgress
+            .subscribe(onNext: { [weak self] progress in
+                self?.renderProgress(progress: progress)
+            })
+            .disposed(by: disposeBag)
+        
+        webView.rx.url
+            .subscribe(onNext: { [weak self] url in
+                guard let url = url else { return }
+                self?.scrape(url: url)
+            })
+            .disposed(by: disposeBag)
+        
+        scrapeResult.asObservable()
+            .subscribe(onNext: { [weak self] scrapeResult in
+                guard 0 < scrapeResult.mainImageURLs.count,
+                    0 < scrapeResult.thumbImageURLs.count else {
+                        DispatchQueue.main.async {
+                            self?.viewButton.isEnabled = false
+                        }
+                        return
+                }
+                
+                self?.viewButton.isEnabled = true
+            })
+            .disposed(by: disposeBag)
+
+        viewButton.rx.tap
+            .subscribe { [weak self] _ in
+                guard let main = self?.scrapeResult.value.mainImageURLs,
+                    let thumb = self?.scrapeResult.value.thumbImageURLs else { return }
+                
+                let authroImageURL: URL? = {
+                    guard let path = self?.scrapeResult.value.authorImagePath else {
+                        return nil
+                    }
+                    return URL(string: path)
+                }()
+                
+                let v = SlideViewerController.setup(
+                    mainImageURLs: main,
+                    thumbImageURLs: thumb,
+                    avatarImageURL: authroImageURL,
+                    title: self?.scrapeResult.value.title ?? "",
+                    author: self?.scrapeResult.value.author ?? "")
+                
+                self?.present(v, animated: true, completion: nil)
+            }
+            .disposed(by: disposeBag)
+    }
+}
+
+extension SearchSpeakerDeckViewController {
+    
+    private func renderProgress(progress: Double) {
+        guard progress == 1 else {
+            progressView.isHidden = false
+            progressView.setProgress(Float(progress), animated: true)
+            return
+        }
+        
+        progressView.isHidden = true
+        progressView.setProgress(0.0, animated: false)
+    }
+    
+    private func scrape(url :URL) {
+        let request = URLRequest(url: url)
+        
+        URLSession.shared.rx.data(request: request)
+            .flatMap { data -> Observable<FirstScrapeResult> in
+                guard let doc = try? HTML(html: data, encoding: .utf8),
+                    let dataId = doc.body?.css(".speakerdeck-embed").first?["data-id"],
+                    let playerURL = URL(string: "https://speakerdeck.com/player/\(dataId)") else {
+                        return Observable.empty()
+                }
+
+                let details = doc.body?.css("div#talk-details").first
+                let title = details?.css("h1").first?.innerHTML
+                let author = details?.css("a").first?.innerHTML
+                let authorImagePath = doc.body?.css(".presenter").first?.css("img").first?["src"]
+                
+                let result = FirstScrapeResult(
+                    title: title,
+                    author: author,
+                    authorImagePath: authorImagePath,
+                    playerURL: playerURL)
+                
+                return Observable.just(result)
+            }
+            .flatMap { firstResult -> Observable<SecondScrapeResult> in
+                return self.fetchTalkJson(playerURL: firstResult.playerURL)
+                    .flatMap { fetchResult -> Observable<SecondScrapeResult> in
+                        let secondResult = SecondScrapeResult(
+                            fetchResult: fetchResult,
+                            firstResult: firstResult)
+                        
+                        return Observable.just(secondResult)
+                    }
+            }
+            .subscribe(onNext: { secondResult in
+                let scrapeResult = ScrapeResult(
+                    title: secondResult.firstResult.title,
+                    author: secondResult.firstResult.author,
+                    authorImagePath: secondResult.firstResult.authorImagePath,
+                    mainImageURLs: secondResult.fetchResult.mainImageURLs,
+                    thumbImageURLs: secondResult.fetchResult.thumbImageURLs)
+                
+                self.scrapeResult.value = scrapeResult
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private struct FirstScrapeResult {
+        let title: String?
+        let author: String?
+        let authorImagePath: String?
+        let playerURL: URL
+    }
+    
+    private struct SecondScrapeResult {
+        let fetchResult: FetchResult
+        let firstResult: FirstScrapeResult
+    }
+    
+    private struct FetchResult {
+        let mainImageURLs: [URL]
+        let thumbImageURLs: [URL]
+    }
+    
+    private func fetchTalkJson(playerURL: URL) -> Observable<FetchResult> {
+        return Observable<FetchResult>.create { observer in
+            DispatchQueue.main.async {
+                let _webview = WKWebView()
+                _webview.load(URLRequest(url: playerURL))
+                _webview.rx.loading
+                    .subscribe(onNext: { loading in
+                        if loading { return }
+                        DispatchQueue.main.async {
+                            _webview.evaluateJavaScript("JSON.stringify(talk)") { res, error in
+                                if let error = error {
+                                    print(error)
+                                    return
+                                }
+                                
+                                let decorder = JSONDecoder()
+                                guard let res = res as? String,
+                                    let data = res.data(using: .utf8),
+                                    let talk = try? decorder.decode(Talk.self, from: data) else { return }
+                                
+                                let main: [URL] = talk.slides.map { URL(string: $0.original)! }
+                                let thumb: [URL] = talk.slides.map { URL(string: $0.thumb)! }
+
+                                observer.onNext(FetchResult(mainImageURLs: main, thumbImageURLs: thumb))
+                            }
+                        }
+                    })
+                    .disposed(by: self.disposeBag)
+            }
+            
+            return SingleAssignmentDisposable()
+        }
     }
 }

@@ -1,19 +1,20 @@
 # Uncomment the next line to define a global platform for your project
 # platform :ios, '9.0'
 
-target 'SlideViewer' do
+target 'Slive' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
 
-  # Pods for SlideViewer
+  # Pods for Slive
   pod 'SlideViewer', path: '../pod/PDFSlideView'
   pod 'XLPagerTabStrip'
   pod 'R.swift'
   pod 'RxSwift'
   pod 'RxCocoa'
   pod 'RxWebKit'
+  pod 'Kanna', git: 'https://github.com/tid-kijyun/Kanna', branch: 'feature/v4.0.0'
 
-  target 'SlideViewerTests' do
+  target 'SliveTests' do
     inherit! :search_paths
     # Pods for testing
   end
