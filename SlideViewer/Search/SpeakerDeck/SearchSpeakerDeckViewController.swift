@@ -60,8 +60,11 @@ extension SearchSpeakerDeckViewController {
             .disposed(by: disposeBag)
         
         webView.rx.url
+            .flatMap { url -> Observable<URL> in
+                guard let url = url else { return Observable.empty() }
+                return Observable.just(url)
+            }
             .subscribe(onNext: { [weak self] url in
-                guard let url = url else { return }
                 self?.scrape(url: url)
             })
             .disposed(by: disposeBag)
@@ -117,6 +120,9 @@ extension SearchSpeakerDeckViewController {
         progressView.isHidden = true
         progressView.setProgress(0.0, animated: false)
     }
+}
+
+extension SearchSpeakerDeckViewController {
     
     private func scrape(url :URL) {
         let request = URLRequest(url: url)
@@ -181,35 +187,51 @@ extension SearchSpeakerDeckViewController {
         let mainImageURLs: [URL]
         let thumbImageURLs: [URL]
     }
-    
+
     private func fetchTalkJson(playerURL: URL) -> Observable<FetchResult> {
-        return Observable<FetchResult>.create { observer in
+        
+        return load(playerURL: playerURL)
+            .flatMap { _webview in
+                return _webview.rx.loading.flatMap { loading -> Observable<WKWebView> in
+                    if loading { return Observable<WKWebView>.empty() }
+                    return Observable.just(_webview)
+                }
+            }
+            .subscribeOn(MainScheduler.instance)
+            .flatMap { _webview -> Observable<Any?> in
+                return Observable<Any?>.create { observer in
+                    _webview.evaluateJavaScript("JSON.stringify(talk)") { res, error in
+                        if let error = error { return observer.onError(error) }
+                        observer.onNext(res)
+                    }
+                    return SingleAssignmentDisposable()
+                }
+            }
+            .flatMap { res -> Observable<Talk> in
+                let decorder = JSONDecoder()
+                guard let res = res as? String,
+                    let data = res.data(using: .utf8),
+                    let talk = try? decorder.decode(Talk.self, from: data) else {
+                        return Observable.empty()
+                }
+                
+                return Observable.just(talk)
+            }
+            .flatMap { talk -> Observable<FetchResult> in
+                let main: [URL] = talk.slides.map { URL(string: $0.original)! }
+                let thumb: [URL] = talk.slides.map { URL(string: $0.thumb)! }
+                
+                let result = FetchResult(mainImageURLs: main, thumbImageURLs: thumb)
+                return Observable.just(result)
+            }
+    }
+    
+    private func load(playerURL: URL) -> Observable<WKWebView> {
+        return Observable<WKWebView>.create { observer in
             DispatchQueue.main.async {
                 let _webview = WKWebView()
                 _webview.load(URLRequest(url: playerURL))
-                _webview.rx.loading
-                    .subscribe(onNext: { loading in
-                        if loading { return }
-                        DispatchQueue.main.async {
-                            _webview.evaluateJavaScript("JSON.stringify(talk)") { res, error in
-                                if let error = error {
-                                    print(error)
-                                    return
-                                }
-                                
-                                let decorder = JSONDecoder()
-                                guard let res = res as? String,
-                                    let data = res.data(using: .utf8),
-                                    let talk = try? decorder.decode(Talk.self, from: data) else { return }
-                                
-                                let main: [URL] = talk.slides.map { URL(string: $0.original)! }
-                                let thumb: [URL] = talk.slides.map { URL(string: $0.thumb)! }
-
-                                observer.onNext(FetchResult(mainImageURLs: main, thumbImageURLs: thumb))
-                            }
-                        }
-                    })
-                    .disposed(by: self.disposeBag)
+                observer.onNext(_webview)
             }
             
             return SingleAssignmentDisposable()
