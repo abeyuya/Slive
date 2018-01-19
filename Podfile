@@ -6,7 +6,7 @@ target 'Slive' do
   use_frameworks!
 
   # Pods for Slive
-  pod 'SlideViewer', path: '../pod/PDFSlideView'
+  pod 'SlideViewer', git: 'https://github.com/abeyuya/SlideViewer'
   pod 'XLPagerTabStrip'
   pod 'R.swift'
   pod 'RxSwift'
